@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<style type="text/css">
+</style>
+<script type="text/javascript">
+function sbtPWD()
+{
+	var oldpwd=document.getElementById('oldPWD').value;
+	var pwd1=document.getElementById('PWD1').value;
+	var pwd2=document.getElementById('PWD2').value;
+	var id = <?php echo $_SESSION['employeenum']; ?>;
+	if(pwd1 == pwd2)
+	{
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		}
+		else
+		{// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange=function()
+		{
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				alert("修改密码成功");
+				document.getElementById('PWD1').value="";
+				document.getElementById('PWD2').value="";
+
+			}
+
+		}
+		
+		
+		xmlhttp.open("POST","changePWD.php",false);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send("employeenum="+id+"&pwd="+pwd1);
+	}
+	else
+	{
+		alert("两次输入密码不一致");
+	}
+}
+</script>
+</head>
+<body>
+
+<div name="input"  id="changePWD">
+新密码：  &nbsp<input type="password" id="PWD1"></br>
+</br>
+重复一次：<input type="password" id="PWD2"></br>
+</div>
+</br>
+<div name="submit" id = "submitPWD">
+<input type="submit" value="修改密码" onclick="sbtPWD()">
+</div>
+</br>
+<div>
+<!--
+<?php
+$url = $_SERVER['HTTP_REFERER'];
+print<<<EOT
+-->
+<a href=$url>返回</a>
+<!--
+EOT;
+?>
+-->
+
+<div>
+</body>
+</html>

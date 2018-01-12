@@ -1,0 +1,92 @@
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$tid = $_GET['tid'];
+
+$start = $_GET['pstart'];
+//测试
+//$tid = 1;
+//$start =2;
+$db = new database();
+
+if(isset($tid)&&isset($start))
+{
+    $rltField = "*";
+	$qryField = array("tid");
+	$qryOperator = array("=");
+	$qryValue = array($tid);
+	$result = $db->singleQueryDB('post',$rltField,$qryField,$qryOperator,$qryValue,$start,$postInterval);
+	$count=count($result);
+	if(isArray($result))
+	{
+
+		foreach($result as $key=>$value)
+		{
+		$pname=$value['pname'];
+		$pid=$value['pid'];
+		$cid=$value['cid'];
+		$id=$value['id'];
+		$pcontent=$value['pcontent'];
+		$rltField=array('name');
+		
+		$qryField=array('employeenum');
+		$qryOperator=array('=');
+		$qryValue=array($id);
+		//发帖人名字
+		$rltname=$db->singleQueryDB('person',$rltField,$qryField,$qryOperator,$qryValue);
+	   
+		$name=$rltname[0]['name'];
+		$pdate=$value['pdate'];
+		$pip=$value['pip'];
+		
+		print<<<EOT
+-->
+	<div id="pname">
+	$pname
+	</div>
+	<div id="pdate">
+	由$name 在$pdate 回复 ip:$pip
+	</div>
+	<div id="pcontent">
+	$pcontent
+	</div>
+	<div id='pSep'></div>
+	
+
+<!--
+EOT;
+}
+}
+$qryField=array('tid');
+$qryOperator=array('=');
+$qryValue=array($tid);
+$total = $db->queryCountDB('post',$qryField,$qryOperator,$qryValue);
+//$num=ceil($total/$postInterval);
+
+$url;
+if($start != 0)
+{
+$prev=$start-$postInterval;
+$url="topic_content.php?tid=".$tid."&pstart=".$prev;
+print <<<EOT
+-->
+<a href=$url>&lt&lt</a>
+<!--
+EOT;
+}
+for ($tem =($start+$postInterval); $tem<$total; $tem+=$postInterval)
+{
+$url="topic_content.php?tid=".$tid."&pstart=".$tem;
+$nextnum=($tem/$postInterval)+1;
+print <<<EOT
+-->
+<a href=$url>$nextnum</a>
+<!--
+EOT;
+}
+
+}
+?>
+-->
+

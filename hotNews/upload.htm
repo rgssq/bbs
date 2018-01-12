@@ -1,0 +1,205 @@
+<html>
+<head>
+ <link href="style/style.css" rel="stylesheet" type="text/css" />
+<script type='text/javascript'>
+function startUpload(){
+      document.getElementById('f1_upload_process').style.visibility = 'visible';
+      document.getElementById('f1_upload_form').style.visibility = 'hidden';
+      return true;
+}
+
+function stopUpload(success){
+      window.location.reload(); 
+      var result = '';
+      if (success != ""){
+         result = '<span class="msg">文件已经成功上传<\/span><br/><br/>';
+		 ic.Url = success;
+		 ic.Init();
+      }
+      else {
+         result = '<span class="emsg">出错了<\/span><br/><br/>';
+      }
+      document.getElementById('f1_upload_process').style.visibility = 'hidden';
+      document.getElementById('f1_upload_form').innerHTML = result + '<label>图片: <input name="myfile" type="file" size="30" /><\/label><label>描述:<input type="text" cols="100" name="tRscDes"\/><\/label><label><input type="submit" name="submitBtn" class="sbtn" value="上传" /><\/label>';
+      document.getElementById('f1_upload_form').style.visibility = 'visible';      
+      return true;   
+}
+
+</script>
+</head>
+<body>
+<!--
+<?php
+session_start();
+if($_SESSION['employeenum'])
+{
+	print <<<EOT
+-->
+<div id="container">
+	 <div id="content">
+		 <form action="upload.php" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="startUpload();" >
+			 <p id="f1_upload_process">上传中...<br/><img src="loader.gif" /><br/></p>
+			 <p id="f1_upload_form" align="center"><br/>
+				 <label>图片：  
+					  <input name="myfile" type="file" size="30" />
+				 </label>
+				 <label>描述:
+					  <input type="text" cols="100" name='tRscDes'/>
+			     </label>
+				 <label>
+					 <input type="submit" name="submitBtn" class="sbtn" value="上传" />
+				 </label>
+			 </p>
+			 
+			 <iframe id="upload_target" name="upload_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe>
+		 </form>
+	 </div>
+</div>           
+
+<script type="text/javascript">
+var isIE = (document.all) ? true : false;
+
+var isIE6 = isIE && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+
+var $ = function (id) {
+	return "string" == typeof id ? document.getElementById(id) : id;
+};
+
+var Class = {
+	create: function() {
+		return function() { this.initialize.apply(this, arguments); }
+	}
+}
+
+var Extend = function(destination, source) {
+	for (var property in source) {
+		destination[property] = source[property];
+	}
+}
+
+var Bind = function(object, fun) {
+	return function() {
+		return fun.apply(object, arguments);
+	}
+}
+
+var BindAsEventListener = function(object, fun) {
+	var args = Array.prototype.slice.call(arguments).slice(2);
+	return function(event) {
+		return fun.apply(object, [event || window.event].concat(args));
+	}
+}
+
+var CurrentStyle = function(element){
+	return element.currentStyle || document.defaultView.getComputedStyle(element, null);
+}
+
+function addEventHandler(oTarget, sEventType, fnHandler) {
+	if (oTarget.addEventListener) {
+		oTarget.addEventListener(sEventType, fnHandler, false);
+	} else if (oTarget.attachEvent) {
+		oTarget.attachEvent("on" + sEventType, fnHandler);
+	} else {
+		oTarget["on" + sEventType] = fnHandler;
+	}
+};
+
+function removeEventHandler(oTarget, sEventType, fnHandler) {
+    if (oTarget.removeEventListener) {
+        oTarget.removeEventListener(sEventType, fnHandler, false);
+    } else if (oTarget.detachEvent) {
+        oTarget.detachEvent("on" + sEventType, fnHandler);
+    } else { 
+        oTarget["on" + sEventType] = null;
+    }
+};
+</script>
+<script type="text/javascript" src="ImgCropper.js"></script>
+<script type="text/javascript" src="Drag.js"></script>
+<script type="text/javascript" src="Resize.js"></script>
+<style type="text/css" res="style/style.css">
+</style>
+<div id="piccontainer">
+<table  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="600"><div id="bgDiv">
+        <div id="dragDiv">
+          <div id="rRightDown"> </div>
+          <div id="rLeftDown"> </div>
+          <div id="rRightUp"> </div>
+          <div id="rLeftUp"> </div>
+          <div id="rRight"> </div>
+          <div id="rLeft"> </div>
+          <div id="rUp"> </div>
+          <div id="rDown"></div>
+        </div>
+      </div></td>
+    <td align="center"><div id="viewDiv" > </div></td>
+  </tr>
+</table>
+<br />
+<input name="" type="button" value="生成图片" onclick="Create()" />
+</div>
+<!--
+EOT;
+if(isset($_SESSION['icUrl']))
+	$icUrl = $_SESSION['icUrl'];
+else
+	$icUrl = "";
+print<<<EOT
+-->
+
+<script>
+var url="$icUrl";
+alert("url:"+url);
+var ic = new ImgCropper("bgDiv", "dragDiv", url, {
+	Width: 600, Height: 600, Color: "#000",
+	Resize: true,
+	Right: "rRight", Left: "rLeft", Up:	"rUp", Down: "rDown",
+	RightDown: "rRightDown", LeftDown: "rLeftDown", RightUp: "rRightUp", LeftUp: "rLeftUp",
+	Preview: "viewDiv", viewWidth: 300, viewHeight: 300
+})
+
+function Create(){
+	var p = ic.Url, o = ic.GetPos();
+	x = o.Left,
+	y = o.Top,
+	w = o.Width,
+	h = o.Height,
+	pw = ic._layBase.width,
+	ph = ic._layBase.height;
+	
+	
+    if (window.XMLHttpRequest)
+	{// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		
+		
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			alert("截取成功");
+		}
+	}
+	xmlhttp.open("GET","savePic.php?p=" + p + "&x=" + x + "&y=" + y + "&w=" + w + "&h=" + h + "&pw=" + pw + "&ph=" + ph + "&" + Math.random(),true);
+	xmlhttp.send();
+	
+	
+	
+}
+
+</script>
+<!--
+EOT;
+}
+?>
+-->
+
+</body>
+</html>

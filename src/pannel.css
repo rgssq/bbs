@@ -1,0 +1,44 @@
+*
+{
+padding:0;
+margin:0;
+}
+#pannel
+{
+    width:250px;
+	height:220px;
+	margin:20px 1px 20px 1px;
+	border:1px solid #DEDEDE;
+	background:#F8F8F8;
+}
+#pannel ul
+{
+	list-style:none;
+	margin:0;padding:0;
+	height:220px;
+}
+#pannel li
+{
+	padding:4px 0 4px 0;
+	border:1px solid #DEDEDE;
+	overflow:hidden;
+}
+#pannel li a
+{
+	float: left;
+	display: block;
+    width: 200px; /* li 的宽度 这个控制显示多少字后显示...设的宽度大于字数时， 是不会显示...的 */
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+#pannel li a:hover
+{
+	text-decoration:underline;
+}
+#pannel .date
+{
+	float: right;
+	font-size: 9px;
+}

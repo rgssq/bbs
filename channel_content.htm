@@ -1,0 +1,234 @@
+<html>
+<head>
+<style type="text/css">
+#timg
+{
+width:300px;
+height:auto;
+}
+#tname
+{
+width:890px;
+
+padding:2px;
+margin:2px;
+font-size:24px;
+font-weight:bold;
+align:center;
+
+}
+#tdate
+{
+float:right;
+clear:both;
+}
+#tlSep
+{
+width:900px;
+border-top:2px solid #DEDEDE;
+}
+#tcontent
+{
+text-align:left;
+font-size:14px;
+width:870px;
+padding:10px;
+margin:2px;
+float:left;
+clear:both;
+}
+</style>
+</head>
+<body>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+
+session_start();
+$cname=$_SESSION['cname'];
+$cid=$_SESSION['cid'];
+//发帖的起始位置及间隔
+$start=$_GET['tstart'];
+$_SESSION['tstart']=$start;
+if(!isset($start))
+{
+	$start=0;
+}
+global $topicInterval;
+$db = new database();
+
+if(isset($cname) && isset($cid))
+{
+	$access = true;
+	if(isset($_SESSION['employeenum']))
+	{
+		$access = isAuthorized($_SESSION['rprivilege'],$_SESSION['cid']);		
+	}
+	else
+	{
+		$query="select cid from readctl";
+		$result = $db->queryDB('readctl',$query);
+		foreach($result as $key=>$value)
+		{
+			if($value['cid'] == $cid)
+			{
+				$access = false;
+				break;
+			}
+		}
+	}	
+    if($access)
+	{
+		$rltField=array('tid');
+		$qryField=array('cid');
+		$qryOperator=array('=');
+		$qryValue=array($cid);
+		$topic = $db->singleQueryDB('introduction',$rltField,$qryField,$qryOperator,$qryValue,0,30);
+		$introTid;
+		if(isArray($topic))
+		{
+			$introTid = $topic[0]['tid'];
+			$rltField = "*";
+			$qryField = array("tid");
+			$qryOperator = array("=");
+			$qryValue = array($introTid);
+			$result = $db->singleQueryDB('topic',$rltField,$qryField,$qryOperator,$qryValue);
+			if(count($result))
+			{
+				$tname=$result[0]['tname'];
+				$id=$result[0]['id'];
+				$tcontent=$result[0]['tcontent'];
+				$tdate=$result[0]['tdate'];
+				$tip=$result[0]['tip'];
+				print <<<EOT
+-->
+	<div id="tname">
+	</br>
+	$tname
+	</div>
+	<div id="tdate">
+	发表于:$tdate
+	</div>
+	<div id="tlSep">
+	</div>
+	<div id="tcontent">
+	$tcontent
+	</div>
+	<div id="tlSep">
+	</div>
+<!--
+EOT;
+			}
+		}
+			$rltField="*";
+			$qryField=array('cid');
+			$qryOperator=array('=');
+			$qryValue=array($cid);
+			$result = $db->singleQueryDB('topic',$rltField,$qryField,$qryOperator,$qryValue,$start,$topicInterval,array('tid'),"1");
+			$nowid=$start;
+			print<<<EOT
+-->
+<table align = center, width = 80%,BGCOLOR='lightblue'>
+<!--
+EOT;
+			foreach($result as $key=>$value)
+			{
+				$tname=$value['tname'];
+				$tid=$value['tid'];
+				$cid=$value['cid'];
+				$id=$value['id'];
+				$rltField=array('name');
+				$qryField=array('employeenum');
+				$qryOperator=array('=');
+				$qryValue=array($id);
+				//发帖人名字
+				$rltname=$db->singleQueryDB('person',$rltField,$qryField,$qryOperator,$qryValue,0,30);
+			   
+				$name=$rltname[0]['name'];
+				$tdate=$value['tdate'];
+				$tip=$value['tip'];
+				$url="topic_content.php?tid=".$tid."&pstart=0";
+				if($tid != $introTid)
+				{
+					$nowid+=1;
+					print<<<EOT
+-->
+    <tr>
+	<td>
+    $nowid
+	<td>
+	<td>
+	<td>
+	<td colspan='5'>
+	<a href=$url>$tname</a>
+	</td>
+	<td>
+	由$name
+	</td>
+	<td>
+	在 $tdate 发表
+	</td>
+	<td>
+	ip: $tip
+	</td>
+	</tr>
+<!--
+EOT;
+				}
+		}
+print <<<EOT
+-->
+</table>
+<!--
+EOT;
+		$qryField=array('cid');
+		$qryOperator=array('=');
+		$qryValue=array($cid);
+		$total = $db->queryCountDB('topic',$qryField,$qryOperator,$qryValue);
+		$url;
+		if($start != 0)
+		{
+			$prev=($start-$topicInterval);
+			$url="channel.php?cid=".$cid."&cname=".$cname."&tstart=".$prev;
+			print <<<EOT
+-->
+<a href=$url>&lt&lt</a>
+<!--
+EOT;
+		}
+		for ($tem =($start+$topicInterval); $tem<$total; $tem+=$topicInterval)
+		{
+			$nextnum=($tem/$topicInterval)+1;
+
+			$url="channel.php?cid=".$cid."&cname=".$cname."&tstart=".$tem;
+			print <<<EOT
+-->
+
+<a href=$url>$nextnum</a>
+<!--
+EOT;
+		}
+		$url="channel.php?cid=".$cid."&cname=".$cname."&tstart=0";
+		print <<<EOT
+-->
+<a href=$url>首页</a>
+<!--
+EOT;
+			
+		}
+		else
+		{
+		print <<<EOT
+-->
+<tr><td></br><h2>没有权限访问该版，游客请登录，注册用户请联系管理员!</h2></br></tr></td>
+</table>
+<!--
+EOT;
+		}
+}
+
+?>
+-->
+</body>
+</html>

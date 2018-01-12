@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<style type="text/css">
+<!-- 
+*{
+margin:none;
+padding:none;
+}
+table, td, a {font:10pt;}   
+
+/*重点：固定行头样式*/  
+.scrollRowThead{position: relative; left: expression(this.parentElement.parentElement.parentElement.parentElement.scrollLeft);z-index:0;}  
+/*重点：固定表头样式*/  
+.scrollColThead {position: relative;top: expression(this.parentElement.parentElement.parentElement.scrollTop);z-index:2;}  
+/*行列交叉的地方*/  
+.scrollCR { z-index:3;}  
+/*div外框*/  
+.scrollDiv {height:200px;clear: both; border: 1px solid #EEEEEE;OVERFLOW: scroll;width: 320px; }  
+/*行头居中*/  
+.scrollColThead td,.scrollColThead th{ text-align: center ;}  
+/*行头列头背景*/  
+.scrollRowThead,.scrollColThead td,.scrollColThead th{background-color:EEEEEE;}  
+/*表格的线*/  
+.scrolltable{border-bottom:1px solid #CCCCCC; border-right:1px solid #CCCCCC; }  
+/*单元格的线等*/  
+.scrolltable td,.scrollTable th{border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; padding: 5px; }  
+  
+.scrollTable thead th{background-color:#EEEEEE;font-weight:bold;position:relative;}  
+--> 
+#list {list-style-type:none; padding:0; margin:0 0 0 0;width:900px; text-align:left;}
+#list .left{float:left; width:387px;}
+#list .right{float:left;width:254px;}
+body {
+text-align:center;
+font:12px/1.6em Helvetica, Arial, sans-serif;}
+#main { width:1066px;margin-left:auto;margin-right:auto;text-align:left;align:center;
+		border-style:none;border-left-style:solid;border-left-color:#DEDEDE;
+		border-right-style:solid;border-right-color:#DEDEDE;
+		border-bottom-style:solid;border-bottom-color:#DEDEDE;}
+.clear {
+  clear: both;
+  }
+#content{
+}
+#divleft{
+float:left;
+border-right:2px solid #DEDEDE;
+border-top:2px solid #DEDEDE;
+border-bottom:1px solid #DEDEDE;
+width:900px;
+}
+#divleft ul
+{
+width:810px;
+}
+#divleft  li
+{
+width:810px;
+height:120px;
+border:2px solid #DEDEDE;
+margin:20px;
+}
+#pannel
+{
+float:left;
+width:610px;
+height:110px;
+margin:5px;
+
+text-align:center;
+}
+#pannel img
+{
+width:120px;
+height:100px;
+overflow:auto;
+}
+
+
+#pannel .image
+{
+float:left;
+width:200px;
+height:100px;
+
+}
+#pannel .title
+{
+float:left;
+height:100px;
+width:150px;
+
+text-align:center;
+
+}
+#pannel .title a
+{
+font-size:25px;
+text-decoration:none;
+
+}
+#divleft .count
+{
+float:right;
+width:150px;
+height:120px;
+border-left:2px solid #DEDEDE;
+text-align:center;
+font-size:14px;
+}
+#divright
+{
+float:right;
+border:1px solid #DEDEDE;
+font-size:12px;
+width:160px;
+}
+
+</style> 
+
+</head>
+<body >
+
+<div id="main">
+<?php
+	
+	require_once('menu.htm');
+?>
+<div id="content">
+<div id="divleft">
+<ul id="list">
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+
+$db = new database();
+$query="select cid from forum";
+$result=$db->queryDB('forum',$query);
+foreach($result as $key=>$value)
+{
+	$cid=$value['cid'];
+	$query="select * from channel where cid=".$cid;
+	$hottopic=$db->queryDB('channel',$query);
+	$cname=$hottopic[0]['cname'];
+	$url="channel.php?cid=".$cid."&cname=".$cname."&tstart=0";
+	$pic="";
+	if($cname == '美食分享')
+		$pic='.//images//food.jpg';
+	else if($cname == '淘衣交流')
+		$pic='.//images//clothes.jpg';
+	else if($cname == '谈天说地')
+	    $pic='.//images//chat.jpg';
+	else if ($cname == '出行天下')
+		$pic='.//images//travel.jpg';
+	else
+		$pic='.//images//default.jpg';
+
+	$qryField=array('cid');
+	$qryOperator=array('=');
+	$qryValue=array($cid);
+
+	$count=$db->queryCountDB('topic',$qryField,$qryOperator,$qryValue);
+	$time=substr($time=date("Y-m-d H:i:s"),0,10);
+	$date1 = $time . " 00:00:00";
+	$date2 = $time . " 23:59:59";
+	$qryField=array('cid','tdate','tdate');
+	$qryOperator=array('=','>','<');
+	$qryValue=array($cid,$date1,$date2);
+	$today=$db->queryCountDB('topic',$qryField,$qryOperator,$qryValue);
+	print<<<EOT
+-->
+	<li><div id ="pannel">
+	    <div class="image"><img src=$pic></div>
+		<div class="title"><a href=$url></br></br>$cname</a></div>
+		</div>
+		<div class="count"></br></br>总贴数：$count</br>今日新帖：$today</div></li>
+<!--
+EOT;
+}
+?>
+-->
+
+
+</ul>
+</div>
+<div id="divright">
+<?php
+	session_start();
+	if(empty($_SESSION['employeenum']))
+	{
+		
+		require_once( 'login.htm');
+	}
+	else
+	{	
+		require_once('logined.htm');
+	}
+?>
+
+</div>
+<div class="clear"></div>
+</div>
+</div>
+
+
+</body>
+</html>

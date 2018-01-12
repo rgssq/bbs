@@ -1,0 +1,32 @@
+<!--
+<?php
+//session_start();
+
+if(!empty($_SESSION['employeenum']))
+{
+	$name=$_SESSION['name'];
+	$ip = $_SESSION['ip'];
+	print <<<EOT
+-->
+	<form name="loginedForm" method="post" action="logout.php" onSubmit="return InputCheck(this)"> 
+	<table>
+	<tr>
+		<td colspan = "2">
+		»¶Ó­·ÃÎÊ£¡$name
+		</td>
+		<td>
+		<input type="submit" name="logout" value="×¢Ïú"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan = "3">
+		µÇÂ¼ip:$ip
+		</td>
+	</tr>
+	</table>
+	</form>
+<!--
+EOT;
+}
+?>
+-->

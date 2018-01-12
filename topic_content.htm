@@ -1,0 +1,87 @@
+<html>
+<head>
+<style type="text/css">
+#timg
+{
+width:300px;
+height:auto;
+}
+</style>
+</head>
+<body>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+session_start();
+
+$tid = $_GET['tid'];
+
+$db = new database();
+$access = true;
+if(isset($_SESSION['employeenum']))
+{
+	$access = isAuthorized($_SESSION['rprivilege'],$_SESSION['cid']);		
+}
+else
+{
+	$query="select cid from readctl";
+	$result = $db->queryDB('readctl',$query);
+	foreach($result as $key=>$value)
+	{
+		if($value['cid'] == $cid)
+		{
+			$access = false;
+			break;
+		}
+	}
+}	
+if($access)
+{
+	if(isset($tid))
+	{
+		$rltField = "*";
+		$qryField = array("tid");
+		$qryOperator = array("=");
+		$qryValue = array($tid);
+		$result = $db->singleQueryDB('topic',$rltField,$qryField,$qryOperator,$qryValue);
+		if(count($result))
+		{
+			$tname=$result[0]['tname'];
+			$id=$result[0]['id'];
+			$tcontent=$result[0]['tcontent'];
+			$tdate=$result[0]['tdate'];
+			$tip=$result[0]['tip'];
+			print <<<EOT
+	-->
+		<div id="tname">
+		</br>
+		$tname
+		</div>
+		<div id="tdate">
+		发表于:$tdate
+		</div>
+		<div id="tlSep">
+		</div>
+		<div id="tcontent">
+		$tcontent
+		</div>
+	<!--
+EOT;
+		}
+	}
+}
+else
+{
+	print <<<EOT
+-->
+<table>
+<tr><td></br><h2>没有权限访问该版，游客请登录，注册用户请联系管理员!</h2></br></tr></td>
+</table>
+<!--
+EOT;
+}
+?>
+-->
+</body>
+</html>

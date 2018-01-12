@@ -1,0 +1,276 @@
+<html>
+<head>
+<script language="JavaScript" type="text/JavaScript">
+function AddItem(ItemId)
+{
+	
+	var item=ItemId.split("|");
+	var title;
+	title = item[1];
+
+	var rsc=item[0];
+	// rsc的格式是.\upload******.ext(jpg,gif,exe,htm)
+	//粗略，js的数组是一种对象数组
+	
+	var rscResult=rsc.split(".");
+	var len = rscResult.length;
+	var content="";
+	for(var i = 1;i<len-1;i++)
+	{
+		alert(rscResult[i]);
+		content+=rscResult[i]+".";
+	}
+	alert(content);
+	var ext=rscResult[len-1];
+	len = content.length;
+	content=content.slice(0,len-1);
+	if(ext.toLowerCase() == "jpg" || ext.toLowerCase() == "gif")
+	{
+		document.topic.topic_content.value += "<lable align=\"center\">" + title +"<\/lable>"+"</br>";
+		//传入js的字符不能以空格分隔
+		document.topic.topic_content.value += "<img " + "src="+content+"\."+ext+"></br>";
+		//此处可为图片设置格式，防止过大，设置一个width或者一个height即可
+	}
+		
+	else if(ext.toLowerCase() == "htm")
+	{
+		document.topic.topic_content.value += "<lable align=\"center\">" + title +"<\/lable>"+"</br>";
+		document.topic.topic_content.value += "<iframe align=\"center\" src=\""+content+"\."+ext+"\" frameborder=0> </iframe></br>";
+		
+	}
+	else
+	{
+		document.topic.topic_content.value = document.topic.topic_content.value + 
+		"<a href=\""+content+"."+ext+"\">" + title + "</a></br>";
+		
+		//传入js的字符不能以空格分隔
+	}	
+}
+     
+function DeleteItem(ItemId)
+{
+	var item=ItemId.split("|");
+	var title;
+	title = item[1];
+
+	var rsc=item[0];
+	// rsc的格式是..\upload******.ext(jpg,gif,exe,htm)
+	var rscResult=rsc.split(".");
+	var content=rscResult[2];
+	var contentResult=content.split("\\");
+	var file=contentResult[contentResult.length-1];
+	var ext=rscResult[3];
+    //取得页面的内容
+	var mTopic=document.topic.topic_content.value;
+	//var test="upload";
+	alert(mTopic);
+	//定义资源正则表达式
+	var regRsc;
+	//定义位置 正则表达式
+	//var regNum = new RegExp("附件([0-9])*:");
+	//var nums;
+	//此处定义附件所处位置变量
+	//var num;
+	//获得所有带附件的所有名目 加g
+    var regAll = new RegExp("附件([0-9])*:","g");
+	if((mTopic != "") && (ext.toLowerCase() == "jpg" || ext.toLowerCase() == "gif"))
+	{
+        //多行匹配加m
+		var reg = new  RegExp("<lable([^>])*>"+title+"<\/lable></br>[^>]*"+file+"\."+ext+"></br>","m");
+		//var reg = new RegExp("<lable([^>])*>"+title+"<\/lable>");
+		regRsc = eval(reg);
+		var result = mTopic.match(regRsc);
+		alert("匹配结果"+result[0]);
+        //nums = regNum.exec(result);
+		//此处获得附件所处位置
+	    //num = Number(nums[1]);
+	}
+	
+	else if((mTopic != "") && (ext.toLowerCase() == "htm"))
+	{
+		var reg = new  RegExp("<lable([^>])*>"+title+"<\/lable><\/br>"+"<iframe[^>]*"+file+"."+ext+"([^>])*> <\/iframe><\/br>","m");
+		regRsc = eval(reg);
+		var result = mTopic.match(regRsc);
+		alert(regRsc);
+		alert("匹配结果"+result[0]);
+	}
+	
+	else if(mTopic != "")
+	{
+		var reg = new  RegExp("<a href=\"\."+file+"\."+ext+"\">" + title +"</a></br>","m");
+		regRsc = eval(reg);
+		var result = mTopic.match(regRsc);
+		alert("匹配结果"+result[0]);
+	}
+	else
+	{
+		;
+	}
+	// /g 匹配时候不能用regAll.exec(mTopic) 必须用mTopic.match()
+	//var allResult = mTopic.match(regAll);
+	//var rstLen = allResult.length;
+	document.topic.topic_content.value = mTopic.replace(regRsc,"");
+	
+//	mTopic = document.topic.topic_content.value;
+//不将后面的附件数目改变，这样相应的删除会失效，还用的是原来的参数	
+/*  if (num < rstLen)
+    {
+		
+		for(;num < rstLen;num++)
+		{
+		var newNum = num;
+		var oldNum = num + 1;
+		
+		var oldReg = eval(new RegExp("附件"+oldNum));
+		alert(oldReg);
+		var newReg = "附件"+newNum;
+        document.topic.topic_content.value = mTopic.replace(oldReg,newReg);
+		}
+		
+    }*/
+	
+}
+</script>
+</head>
+<body>
+<!--
+<?php
+require_once('../common.php');
+require_once('../dbquery.php');
+session_start();
+if(!empty($_SESSION['employeenum']))
+{
+	if(($_SESSION['tjump']==true)&&($_SESSION['cid']==$_GET['cid']))
+	{
+	}
+	else
+	{
+	unset($_SESSION['ttitle']);
+	}
+$source=$_SESSION['source'];
+print <<<EOT
+-->
+<form method='POST' action='add_topic.php' name='topic'
+enctype="multipart/form-data">
+<lable>标题：</lable>
+<!--
+EOT;
+if(isset($_SESSION['ttitle']))
+{
+	$ttitle=$_SESSION['ttitle'];
+    print <<<EOT
+-->
+<textarea cols="50" rows="1" name='ttitle'>
+$ttitle
+</textarea>
+</br>
+<!--
+EOT;
+}
+else
+{
+	print <<<EOT
+-->
+<textarea cols="50" rows="1" name='ttitle'>
+</textarea>
+</br>
+<!--
+EOT;
+}
+//此处想哪里保存cid,哪里保存是跳转还是点击	
+if(($_SESSION['tjump']==true)&&($_SESSION['cid']==$_GET['cid']))
+{
+	$_SESSION['tjump']=false;
+	if(!empty($_SESSION['tsrc']))
+	{
+	$src=explode(";",$_SESSION['tsrc']);
+	print <<<EOT
+-->
+<table name='trsc'>
+<!--
+EOT;
+	foreach($src as $value)
+	{
+	$subsrc=explode("|",$value);
+	$trans=str_replace("\\","\\\\",$value);
+	$trims=str_replace(" ","",$trans);
+	//传入数据库时候也要将\作为特殊字符处理，所以添加时候还是再将\转义，所以添加$delete
+	$delete=str_replace("\\","\\\\",$trims);
+	//此处需要将传入删除时候的\转化成\\\\,
+	//传入js时候，变为\\
+	//这样传入正则表达式时候，才能表达为\
+	print <<<EOT
+-->
+		<tr>
+		<td colspan=5>
+			<lable>$subsrc[0]</lable>
+		</td>
+		<td>
+			<a href="#" onclick=AddItem("$delete")>插入</a>
+		</td>
+		<td>
+			<a href="#" onclick=DeleteItem("$delete")>删除</a>
+		</td>
+		</tr>
+<!--
+EOT;
+}
+	print <<<EOT
+-->
+</table>
+<!--
+EOT;
+}
+}
+else
+{
+$_SESSION['cid']=$_GET['cid'];
+unset($_SESSION['tsrc']);
+unset($_SESSION['tcontent']);
+}
+print <<<EOT
+-->
+
+
+<input type="file" name="file" id="file" /> 
+<!--<label for="file">Filename:</label>-->
+<label>描述</label><input type="text" cols="40" name='tRscDes' />
+<input type="submit" name="submit" value="上传" />
+</br>
+
+
+<!--
+EOT;
+if(isset($_SESSION['tcontent']))
+{
+	$tcontent=$_SESSION['tcontent'];
+	print <<<EOT
+-->
+<textarea cols="60" rows="30" wrap="soft" name='tcontent' id='topic_content'>
+$tcontent
+</textarea>
+<!--
+EOT;
+}
+else
+{
+	print <<<EOT
+-->
+<textarea cols="60" rows="30" wrap="soft" name='tcontent' id='topic_content'>
+</textarea>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</br>
+<input type='submit' name = 'addTopic' value="发帖">
+</form>
+<!--
+EOT;
+}
+
+?>
+-->
+<body>
+</html>

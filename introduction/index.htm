@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<style type="text/css">
+#timg
+{
+width:300px;
+height:auto;
+}
+</style>
+<script type="text/javascript">
+var tid="";
+var cid="";
+function selectChannel()
+{
+	cid = document.getElementById('pannel').value;
+	if (window.XMLHttpRequest)
+	{// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		//普通text使用CreateTextNode;
+		//html tag使用createElement;
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			if(xmlhttp.responseText == "0")
+			{
+				var add = document.createElement('input');
+				add.type="submit";
+				add.value="设为介绍版块";
+				add.onclick=function(){
+					setIntro();
+				}
+				document.getElementById('submitIntro').innerHTML="";
+				document.getElementById('submitIntro').appendChild(add);
+				tid="";
+				document.getElementById('showIntro').innerHTML="";
+				document.getElementById('showIntro').height="0px";
+			}
+			else if(xmlhttp.responseText == "")
+			{
+				document.getElementById('showIntro').innerHTML="<h>无权限或者未登录</h>";
+			}
+			else
+			{
+				tid = xmlhttp.responseText;
+				var iframeTopic = document.createElement('iframe');
+			    iframeTopic.src="../topic_content.htm?tid="+tid;
+				iframeTopic.width="100%";
+				iframeTopic.height="100%";
+				document.getElementById('showIntro').height="500px";
+			    document.getElementById('showIntro').appendChild(iframeTopic);
+               
+
+				document.getElementById('submitIntro').innerHTML="";
+				var cancel = document.createElement('input');
+				cancel.type="submit";
+				cancel.value="取消介绍版块";
+				cancel.onclick=function(){
+					cancelIntro();
+				};
+				document.getElementById('submitIntro').appendChild(cancel);
+			}
+				
+		}
+	}
+	if(cid != "0")
+	{
+		xmlhttp.open('GET','getTid.php?cid='+cid+"&t="+Math.random(),false);
+		xmlhttp.send();
+	}
+	else
+	{
+        document.getElementById('submitIntro').innerHTML="";
+	}
+}
+function cancelIntro()
+{
+	if(window.XMLHttpRequest)
+	{
+		xmlhttp = new XMLHttpRequest();
+	}
+	else
+	{
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		//普通text使用CreateTextNode;
+		//html tag使用createElement;
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			if(xmlhttp.responseText == '')
+				alert('未登录或者无权限操作此版块');
+			else
+			{
+				var add = document.createElement('input');
+				add.type="submit";
+				add.value="设为介绍版块";
+				add.onclick=function(){
+					setIntro();
+				}
+				document.getElementById('submitIntro').innerHTML="";
+				document.getElementById('submitIntro').appendChild(add);
+				tid="";
+				document.getElementById('showIntro').innerHTML="";
+				document.getElementById('showIntro').height="0px";
+
+			}
+		}
+	}
+	xmlhttp.open('GET','cancelIntro.php?cid='+cid+'&t='+Math.random(),false);
+	xmlhttp.send();
+}
+function setIntro()
+{
+	//var iframeAdd = document.createElement('iframe');
+	//iframeAdd.src="add_topic.htm?cid="+cid;
+	//iframeAdd.width="100%";
+	//iframeAdd.height="100%";
+	//document.getElementById('addIntro').height="500px";
+	//document.getElementById('addIntro').appendChild(iframeAdd);
+	document.getElementById('addIntro').style.display="block";
+	
+	document.getElementById('submitIntro').innerHTML="";
+	
+}
+window.onload=function()  
+{  
+  var currHref = location.href;
+  
+  var index = currHref.lastIndexOf("=");
+  var param = "";
+  var jump = "<?php session_start(); echo $_SESSION['tjump']; ?>";
+  if(jump)
+	document.getElementById('addIntro').style.display="block";
+  else
+    document.getElementById('addIntro').style.display="none";
+  if(index != "-1")
+  {    
+	param = currHref.substr(index+1);
+	
+	document.getElementById('pannel').value = param;
+	selectChannel();
+  }
+}
+</script>
+</head>
+<body>
+<?php
+require_once('../common.php');
+require_once('../dbquery.php');
+$db = new database();
+$query="select cid,cname from channel order by cid";
+$result=$db->queryDB('channel',$query);
+?>
+<select id='pannel' onchange='selectChannel()'>
+	<option value=0>请选择版块</option>
+<!--
+<?php
+foreach($result as $key=>$value)
+{
+	$cid=$value['cid'];
+	$cname=$value['cname'];
+	print <<<EOT
+-->
+	<option value=$cid>版块号：$cid 版块名：$cname</option>
+<!--
+EOT;
+}
+?>
+-->
+</select>
+</br></br>
+<div name="submit" id = "submitIntro">
+</div>
+<div id = "showIntro">
+</div>
+<div id = "addIntro">
+<?php 
+require_once("add_topic.htm"); 
+?>
+</div>
+</body>
+</html>

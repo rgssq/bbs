@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link rel="stylesheet" media="all" type="text/css" href="src/pannel.css" />
+</head>
+
+<body>
+<div id="pannel">
+<ul>
+<li><a href="channel.php?cid=1&cname='热点新闻'&tstart=0">更多热点新闻</a></li>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$query="select tid from hotnews order by hid desc limit 0,6";
+$result=$db->queryDB('hotnews',$query);
+foreach($result as $key=>$value)
+{
+	$tid=$value['tid'];
+	$query="select tname,tdate from topic where tid=".$tid;
+	$hottopic=$db->queryDB('topic',$query);
+	$tname=$hottopic[0]['tname'];
+	$tdate=$hottopic[0]['tdate'];
+	$url="topic_content.php?tid=".$tid;
+	$date=substr($tdate,2,8);
+	print<<<EOT
+-->
+	<li><a href=$url>$tname</a><span class="date">$date</span></li>
+<!--
+EOT;
+}
+?>
+-->
+</ul>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+<style type="text/css">
+/* Reset style */
+* {
+	margin:0;
+	padding:0;
+	word-break:break-all;
+}
+body {
+	background:#FFF;
+	color:#333;
+	font:12px/1.6em Helvetica, Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size:1em;
+}
+a {
+	color:#0287CA;
+	text-decoration:none;
+}
+a:hover {
+	text-decoration:underline;
+}
+ul, li {
+	list-style:none;
+}
+fieldset, img {
+	border:none;
+}
+legend {
+	display:none;
+}
+em, strong, cite, th {
+	font-style:normal;
+	font-weight:normal;
+}
+input, textarea, select, button {
+	font:12px Helvetica, Arial, sans-serif;
+}
+table {
+	border-collapse:collapse;
+}
+html {
+	overflow:-moz-scrollbars-vertical;
+} /*Always show Firefox scrollbar*/
+/* iFocus style */
+#ifocus {
+	width:385px;
+	height:220px;
+	margin:20px 0 20px 0;
+	border:1px solid #DEDEDE;
+	background:#F8F8F8;
+}
+#ifocus_pic {
+	position:relative;
+	display:inline;
+	float:left;
+	width:365px;
+	height:200px;
+	overflow:hidden;
+	margin:10px 10px 0 10px;
+}
+#ifocus_piclist {
+	position:relative;
+	left:0; top:0;
+}
+#ifocus_piclist li {
+	width:365px;
+	height:200px;
+	overflow:hidden;
+}
+#ifocus_piclist img {
+	width:365px;
+	overflow:auto;
+}
+
+#ifocus_opdiv {
+	position:absolute;
+	left:0;
+	bottom:0;
+	width:365px;
+	height:35px;
+	background:#000;
+	opacity:0.5;
+	-moz-opacity:0.5;
+	filter:alpha(opacity=50);
+}
+#ifocus_tx {
+	position:absolute;
+	left:250px;
+	bottom:0;
+	color:#FFF;
+	float:right;
+	
+	
+}
+#ifocus_tx .normal {
+	float:left;
+	width:20px;
+	height:20px;
+	
+	border:1px solid #DEDEDE;
+	
+}
+#ifocus_tx .current
+{
+	float:left;
+	width:20px;
+	height:20px;
+	
+	border:1px solid #DEDEDE;
+}
+#ifocus_tx .current a
+{
+color:red;
+}
+#empty {
+clear:both;
+}
+</style>
+
+<script type="text/javascript">
+function $(id) { return document.getElementById(id); }
+
+function addLoadEvent(func){
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function(){
+			oldonload();
+			func();
+		}
+	}
+}
+
+function moveElement(elementID,final_x,final_y,interval) {
+  if (!document.getElementById) return false;
+  if (!document.getElementById(elementID)) return false;
+  var elem = document.getElementById(elementID);
+  if (elem.movement) {
+    clearTimeout(elem.movement);
+  }
+  if (!elem.style.left) {
+    elem.style.left = "0px";
+  }
+  if (!elem.style.top) {
+    elem.style.top = "0px";
+  }
+  var xpos = parseInt(elem.style.left);
+  var ypos = parseInt(elem.style.top);
+  if (xpos == final_x && ypos == final_y) {
+		return true;
+  }
+  if (xpos < final_x) {
+    var dist = Math.ceil((final_x - xpos)/10);
+    xpos = xpos + dist;
+  }
+  if (xpos > final_x) {
+    var dist = Math.ceil((xpos - final_x)/10);
+    xpos = xpos - dist;
+  }
+  if (ypos < final_y) {
+    var dist = Math.ceil((final_y - ypos)/10);
+    ypos = ypos + dist;
+  }
+  if (ypos > final_y) {
+    var dist = Math.ceil((ypos - final_y)/10);
+    ypos = ypos - dist;
+  }
+  elem.style.left = xpos + "px";
+  elem.style.top = ypos + "px";
+  var repeat = "moveElement('"+elementID+"',"+final_x+","+final_y+","+interval+")";
+  elem.movement = setTimeout(repeat,interval);
+}
+
+function classNormal(iFocusTxID){
+	//var iFocusBtns= $(iFocusBtnID).getElementsByTagName('li');
+	var iFocusTxs = $(iFocusTxID).getElementsByTagName('li');
+	for(var i=0; i<iFocusTxs.length; i++) {
+		//iFocusBtns[i].className='normal';
+		iFocusTxs[i].className='normal';
+	}
+}
+
+function classCurrent(iFocusTxID,n){
+	//var iFocusBtns= $(iFocusBtnID).getElementsByTagName('li');
+	var iFocusTxs = $(iFocusTxID).getElementsByTagName('li');
+	//iFocusBtns[n].className='current';
+	iFocusTxs[n].className='current';
+}
+
+function iFocusChange() {
+	if(!$('ifocus')) return false;
+	$('ifocus').onmouseover = function(){atuokey = true};
+	$('ifocus').onmouseout = function(){atuokey = false};
+	var iFocusTx = $('ifocus_tx').getElementsByTagName('li');
+	var listLength = iFocusTx.length;
+	iFocusTx[0].onmouseover = function() {
+		moveElement('ifocus_piclist',0,0,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',0);
+	}
+	if (listLength>=2) {
+		iFocusTx[1].onmouseover = function() {
+			moveElement('ifocus_piclist',0,-200,5);
+			classNormal('ifocus_tx');
+			classCurrent('ifocus_tx',1);
+		}
+	}
+	if (listLength>=3) {
+		iFocusTx[2].onmouseover = function() {
+			moveElement('ifocus_piclist',0,-400,5);
+			classNormal('ifocus_tx');
+			classCurrent('ifocus_tx',2);
+		}
+	}
+	if (listLength>=4) {
+		iFocusTx[3].onmouseover = function() {
+			moveElement('ifocus_piclist',0,-600,5);
+			classNormal('ifocus_tx');
+			classCurrent('ifocus_tx',3);
+		}
+	}
+}
+
+setInterval('autoiFocus()',5000);
+var atuokey = false;
+function autoiFocus() {
+	if(!$('ifocus')) return false;
+	if(atuokey) return false;
+	var focusTxList = $('ifocus_tx').getElementsByTagName('li');
+	var listLength = focusTxList.length;
+	for(var i=0; i<listLength; i++) {
+		if (focusTxList[i].className == 'current') var currentNum = i;
+	}
+	if (currentNum==0&&listLength!=1 ){
+		moveElement('ifocus_piclist',0,-200,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',1);
+	}
+	if (currentNum==1&&listLength!=2 ){
+		moveElement('ifocus_piclist',0,-400,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',2);
+	}
+	if (currentNum==2&&listLength!=3 ){
+		moveElement('ifocus_piclist',0,-600,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',3);
+	}
+	if (currentNum==3 ){
+		moveElement('ifocus_piclist',0,0,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',0);
+	}
+	if (currentNum==1&&listLength==2 ){
+		moveElement('ifocus_piclist',0,0,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',0);
+	}
+	if (currentNum==2&&listLength==3 ){
+		moveElement('ifocus_piclist',0,0,5);
+		classNormal('ifocus_tx');
+		classCurrent('ifocus_tx',0);
+	}
+}
+addLoadEvent(iFocusChange);
+</script>
+</head>
+
+<body>
+
+<div id="ifocus">
+	<div id="ifocus_pic">
+		<div id="ifocus_piclist"  >
+			<ul>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$query="select hurl from hotnews order by hid desc limit 0,4";
+$result=$db->queryDB('hotnews',$query);
+foreach($result as $key=>$value)
+{
+	$url=$value['hurl'];
+	print<<<EOT
+-->
+<li><a target="_blank"><img src=$url  /></a></li>
+<!--
+EOT;
+}
+?>
+-->
+		</ul>
+		</div>
+		<div id="ifocus_opdiv"></div>
+		<div id="ifocus_tx" align="center">
+			<ul>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$query="select tid from hotnews order by hid desc limit 0,1";
+$result=$db->queryDB('hotnews',$query);
+$url="topic_content.php?tid=".$result[0]['tid'];
+print <<<EOT
+-->
+				<li class="current"><a href=$url>1</a></li>
+<!--
+EOT;
+$query="select tid from hotnews order by hid desc limit 1,3";
+$result=$db->queryDB('hotnews',$query);
+foreach($result as $key=>$value)
+{
+	$url="topic_content.php?tid=".$value['tid'];
+	$num = $key + 2;
+	print <<<EOT
+-->
+				<li class="normal"><a href=$url>$num</a></li>
+<!--
+EOT;
+}
+?>
+-->
+			</ul>
+		</div>
+	</div>
+
+</div>
+<p>
+  <!--ifocus end-->
+ 
+
+
+
+
+<div id="empty"></div>
+</body>
+</html>

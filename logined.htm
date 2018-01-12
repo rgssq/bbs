@@ -1,0 +1,35 @@
+<!--
+<?php
+//session_start();
+
+if(!empty($_SESSION['employeenum']))
+{
+	$name=$_SESSION['name'];
+	$ip = $_SESSION['ip'];
+	print <<<EOT
+-->
+	<form name="loginedForm" method="post" action="logout.php" onSubmit="return InputCheck(this)"> 
+	<table>
+	<tr>
+		<td colspan = "2">
+		欢迎访问！$name
+		</td>
+		<td>
+		<input type="submit" name="logout" value="注销"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan = "2">
+		登录ip:$ip
+		</td>
+		<td>
+		<input type="submit" name="usrManage" value="管理"/>
+		</td>
+	</tr>
+	</table>
+	</form>
+<!--
+EOT;
+}
+?>
+-->

@@ -1,0 +1,231 @@
+<html>
+<head>
+<script type="text/javascript">
+window.onload = function(){
+	if(window.XMLHttpRequest)
+	{
+		xmlhttp = new XMLHttpRequest();
+	}
+	else
+	{
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			var pri = xmlhttp.responseText;
+			var arrPri = pri.split(" ");
+			
+
+			var priform=document.getElementById('setPri');
+			var tb = document.createElement("table");
+			tb.id ="priTb";
+			tb.border="1";
+			
+            var tr = document.createElement('tr');
+            var th1 =document.createElement('th');
+
+
+			
+			
+			//td1.appendChild(cb);
+			var txt, newT;
+			txt = '板块';
+			newT = document.createTextNode(txt);
+			th1.appendChild(newT);
+			tr.appendChild(th1);
+			
+            th1 = document.createElement('th');
+            txt = '禁止游客浏览';
+			newT = document.createTextNode(txt);
+			th1.appendChild(newT);
+			tr.appendChild(th1);
+
+			var tbody = document.createElement("tbody");
+            tbody.appendChild(tr);
+			var channel="";
+            if (window.XMLHttpRequest)
+			{// code for IE7+, Firefox, Chrome, Opera, Safari
+				xmlhttp2=new XMLHttpRequest();
+			}
+			else
+			{// code for IE6, IE5
+				xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp2.onreadystatechange=function()
+			{
+				if (xmlhttp2.readyState==4 && xmlhttp2.status==200)
+				{
+					channel=xmlhttp2.responseText;
+				}
+			}
+			xmlhttp2.open("GET","getChannel.php",false);
+			xmlhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xmlhttp2.send();
+            
+			var arrChannel = channel.split(" ");
+			var length = arrChannel.length;
+			
+			//因为channel最后多添加一个空格
+			//切分会多一个空元素，所以length-1
+			for(var i = 0; i < (length-1); i+=2)
+			{   
+				tr = document.createElement("tr");
+				var td = document.createElement("td");
+                //板块名字
+				txt = arrChannel[i+1];
+				newT = document.createTextNode(txt);
+				td.appendChild(newT);
+				tr.appendChild(td);
+                //读权限
+				td = document.createElement("td");
+				var cb = document.createElement("input"); // create input node
+				cb.type = "checkbox"; // set type
+				cb.id = arrChannel[i]; // set name if necessary
+				
+				cb.name = "readPri";
+				
+				td.appendChild(cb);
+				tr.appendChild(td);
+				
+				tbody.appendChild(tr);
+            }
+			
+			tr = document.createElement('tr');
+			var td = document.createElement('td');
+            tr.appendChild(td);
+			
+			
+            var td = document.createElement('td');
+            var la = document.createElement('label');
+			la.onclick = function(){
+				selectAll();
+			};
+			txt = '全选 ';
+			newT = document.createTextNode(txt);
+			la.appendChild(newT);
+			td.appendChild(la);
+			var la = document.createElement('label');
+			la.onclick = function(){
+				unSelectAll();
+			};
+			txt = '全否 ';
+			newT = document.createTextNode(txt);
+			la.appendChild(newT);
+			td.appendChild(la);
+			tr.appendChild(td);
+			tbody.appendChild(tr);
+            
+		
+
+
+
+			tb.appendChild(tbody);
+			
+			priform.appendChild(tb);
+			
+			var sub = document.createElement("input");
+			sub.type = "submit";
+			sub.value = "提交";
+			sub.onclick = function()
+			{
+				setPrivilege();
+			}
+			var submitform = document.getElementById('submitPri');
+			submitform.appendChild(sub);
+
+			var tag = document.getElementsByTagName("input");
+            for(var i=0; i < (arrPri.length-1); i++)
+			{	
+				var pannel = arrPri[i];
+				for(var j=0;j<tag.length;j++)
+				{
+					
+					if(tag[j].getAttribute('id') == pannel)
+						tag[j].checked = tag[j].defaultChecked = true;
+
+				}
+			}
+
+		}
+	}
+	xmlhttp.open('GET','getGuestPri.php?t='+Math.random(),false);
+	xmlhttp.send();
+
+}
+function selectAll()
+{
+	var tag = document.getElementsByTagName("input");
+	
+	
+		for (var i = 0; i < tag.length; i++)
+			if(tag[i].getAttribute('name') == 'readPri')
+				tag[i].checked = tag[i].defaultChecked = true;
+	
+}
+function unSelectAll()
+{
+	var tag = document.getElementsByTagName("input");
+	
+	
+		for (var i = 0; i < tag.length; i++)
+			if(tag[i].getAttribute('name') == 'readPri')
+				tag[i].checked = tag[i].defaultChecked = false;
+
+
+}
+function setPrivilege()
+{
+	var browser=navigator.appName;
+	var read="";
+	var write="";
+	if(browser=="Microsoft Internet Explorer")
+	{
+		var tag = document.getElementsByTagName("input");
+		
+		for(var i = 0; i < tag.length ; i++ )
+		{
+			if(tag[i].getAttribute('name') == 'readPri')
+			{
+				if(tag[i].checked)
+					read+="1 ";
+				else
+					read+="0 ";
+			}
+		}
+	}
+	
+    if (window.XMLHttpRequest)
+	{// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp3=new XMLHttpRequest();
+	}
+	else
+	{// code for IE6, IE5
+		xmlhttp3=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp3.onreadystatechange=function()
+	{
+		if (xmlhttp3.readyState==4 && xmlhttp3.status==200)
+		{
+			alert("更新成功");
+		}
+       
+	}
+    xmlhttp3.open("GET","setGuestPri.php?readPri="+read+"&t="+Math.random(),false);
+	xmlhttp3.send();
+}
+</script>   
+</head>
+<body>
+<h>游客设置阅读权限</h>
+<div name="input"  id="setPri">
+</div>
+<div name="submit" id = "submitPri">
+</div>
+
+</br>
+<div>
+<a href="./index.htm">返回</a>
+<div>
+</body>

@@ -1,0 +1,44 @@
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+print <<<EOT
+-->
+<table align = center, width = 80%,BGCOLOR='lightblue'>
+<tr>
+<!--
+EOT;
+$db = new database();
+$result = $db->queryFullDB('channel',0,30);
+session_start();
+foreach($result as $key=>$value)
+{
+	$cname=$value['cname'];
+	$cid=$value['cid'];
+	$url;
+	if($cid == $_SESSION['cid'])
+	{
+		$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=".$_SESSION['tstart'];
+	}
+	else
+	{
+		$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=0";
+		$_SESSION['tstart'] = 0;
+	}
+	print<<<EOT
+-->
+	<td colspan='2'>
+    <a href=$url>$cname</a>
+	</td>
+<!--
+EOT;
+}
+
+print <<<EOT
+-->
+</tr>
+</table>
+<!--
+EOT;
+?>
+-->

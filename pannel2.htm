@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link rel="stylesheet" media="all" type="text/css" href="src/pannel.css" />
+</head>
+
+<body>
+<div id="pannel">
+<ul>
+<li><a href="channel.php?cid=9&cname='公告通知'&tstart=0">更多公告通知</a></li>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$query="select tname,tdate,tid from topic where cid=9 order by tid desc limit 0,4";
+$result=$db->queryDB('topic',$query);
+foreach($result as $key=>$value)
+{
+	$tid=$value['tid'];
+	$tname=$value['tname'];
+	$tdate=$value['tdate'];
+	$url="topic_content.php?tid=".$tid;
+	$date=substr($tdate,2,8);
+	print<<<EOT
+-->
+	<li><a href=$url>$tname</a><span class="date">$date</span></li>
+<!--
+EOT;
+}
+?>
+-->
+</ul>
+</div>
+
+
+</body>
+</html>

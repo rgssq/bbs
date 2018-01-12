@@ -1,0 +1,37 @@
+<html>
+<head>
+<link rel="stylesheet" media="all" type="text/css" href="src/pannel.css" />
+</head>
+
+<body>
+<div id="pannel">
+<ul>
+<li><a href="channel.php?cid=17&cname='软件共享'&tstart=0">更多软件共享</a></li>
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$query="select tname,tdate,tid from topic where cid=17 order by tid desc limit 0,4";
+$result=$db->queryDB('topic',$query);
+foreach($result as $key=>$value)
+{
+	$tid=$value['tid'];
+	$tname=$value['tname'];
+	$tdate=$value['tdate'];
+	$url="topic_content.php?tid=".$tid;
+	$date=substr($tdate,2,8);
+	print<<<EOT
+-->
+	<li><a href=$url>$tname</a><span class="date">$date</span></li>
+<!--
+EOT;
+}
+?>
+-->
+</ul>
+</div>
+
+
+</body>
+</html>

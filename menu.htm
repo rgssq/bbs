@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml2/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<link rel="stylesheet" media="all" type="text/css" href="src/menu.css" />
+<script src="src/iefix.js" type="text/javascript">
+</script>
+</head>
+<body onload="stuHover()">
+<center>
+<ul id="menu">
+<!--
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+$result = $db->queryFullDB('suchannel',0,30);
+session_start();
+foreach($result as $key=>$value)
+{
+	$sname=$value['sname'];
+	$sid=$value['sid'];
+	$url;
+	$rltField=array('cid');
+	$qryField=array('sid');
+	$qryOperator=array('=');
+	$qryValue=array($sid);
+    $cids = $db->singleQueryDB('consuchannel',$rltField,$qryField,$qryOperator,$qryValue);
+	
+	if(count($cids) < 1)
+	{
+	print<<<EOT
+-->
+	<li><a href="index.php">$sname</a></li>
+<!--
+EOT;
+   }
+   else if(count($cids) == 1)
+   {
+		$cid = $cids[0]['cid'];
+		$cnames = $db->singleQueryDB('channel',array('cname'),array('cid'),array('='),array($cid));
+		$cname=$cnames[0]['cname'];
+		if($cid == $_SESSION['cid'])
+		{
+			$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=".$_SESSION['tstart'];
+		}
+		else
+		{
+			$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=0";
+			$_SESSION['tstart'] = 0;
+		}
+	
+		print<<<EOT
+-->
+	<li><a href=$url>$sname</a></li>
+<!--
+EOT;
+    }
+	else
+	{
+	print<<<EOT
+-->
+	<li class="sub"><a href="#">$sname</a><ul>
+<!--
+EOT;
+		foreach($cids as $key=>$value)
+		{
+			$cid=$value['cid'];
+			$cnames=$db->singleQueryDB('channel',array('cname'),array('cid'),array('='),array($cid));
+			
+			$cname=$cnames[0]['cname'];
+			if($cid == $_SESSION['cid'])
+			{
+				$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=".$_SESSION['tstart'];
+			}
+			else
+			{
+				$url="channel.php?cid=".$cid."&cname=".urlencode($cname)."&tstart=0";
+				$_SESSION['tstart'] = 0;
+			}
+			print<<<EOT
+-->
+	<li class="fly"><a href=$url>$cname</a></li>
+<!--
+EOT;
+		}
+	print<<<EOT
+-->
+	</ul></li>
+<!--
+EOT;
+    }
+}
+?>
+-->
+</ul>
+
+<div id="empty"></div>
+<!--<p>&copy; 2007 stunicholls.com</p>-->
+
+</body>
+</html>

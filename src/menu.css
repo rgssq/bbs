@@ -1,0 +1,45 @@
+/* ================================================================ 
+This copyright notice must be untouched at all times.
+
+The original version of this stylesheet and the associated (x)html
+is available at http://www.stunicholls.com/menu/hover_drop_1.html
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+This stylesheet and the associated (x)html may be modified in any 
+way to fit your requirements.
+=================================================================== */
+
+*
+{
+padding:0;
+margin:0;
+}
+#menu {list-style-type:none; padding:0; margin:0 0 0 0;width:1066px;}
+#menu ul {list-style-type:none; padding:0; margin:0;}
+#menu li {float:left; background:#cdc;  border:1px solid #000; width:150px; height:30px;}
+/*#menu li.sub {background:#aba;}*/
+
+
+
+#menu li a {display:block; color:#000; height:30px; font-family:arial, sans-serif; font-size:11px; line-height:30px; width:150px; text-decoration:none; text-align:center;}
+/*#menu li a table {position:absolute; left:0; top:-1px; border-collapse:collapse; width:0; height:0;}*/
+
+#menu li:hover
+{color:#fff; background:#898; position:relative;z-index:500;}
+#menu li:hover > a {color:#fff; background:#898;}
+
+#menu ul
+{position:absolute; left:-9999px; top:-9999px; width:0; height:0; margin:0; padding:0; list-style:none;}
+
+#menu li:hover ul 
+{left:0; top:30px;    white-space:nowrap; width:150px; z-index:500; height:auto;}
+#menu li:hover ul li
+{
+white-space:nowrap; width:150px; z-index:500; height:30px;
+}
+#menu li:hover ul li:hover
+{color:#fff; background:#898; position:relative;}
+#menu li:hover ul li:hover > a {color:#fff; background:#898;}
+
+#empty {
+clear:both;
+}

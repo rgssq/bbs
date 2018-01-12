@@ -1,0 +1,150 @@
+<?php
+require_once('common.php');
+require_once('dbquery.php');
+$db = new database();
+//////////////////////////////////////////
+$content=array('sname'=>'首页');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'部门介绍');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'公告通知');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'内部文件');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'产品介绍');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'共享园地');
+$db->insertDB('suchannel',$content);
+$content=array('sname'=>'论坛');
+$db->insertDB('suchannel',$content);
+//////////////////////////////////////////
+$content=array('cname'=>'图片新闻');
+$db->insertDB('channel',$content);
+
+//部门介绍 2-8
+$content=array('cname'=>'行长致辞');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'营业部');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'个金部');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'信贷部');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'公司部');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'财会部');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'合规部');
+$db->insertDB('channel',$content);
+//公告通知 9-9
+$content=array('cname'=>'公告通知');
+$db->insertDB('channel',$content);
+//内部文件 10-10
+$content=array('cname'=>'内部文件');
+$db->insertDB('channel',$content);
+//产品介绍 11-16
+$content=array('cname'=>'网上银行');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'手机银行');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'电话银行');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'消息服务');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'自助服务');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'电话转账宝');
+$db->insertDB('channel',$content);
+//共享园地 17-19
+$content=array('cname'=>'软件共享');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'培训课件');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'其他');
+$db->insertDB('channel',$content);
+//论坛 20
+$content=array('cname'=>'论坛');
+$db->insertDB('channel',$content);
+//论坛下面channel
+$content=array('cname'=>'美食分享');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'淘衣交流');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'谈天说地');
+$db->insertDB('channel',$content);
+$content=array('cname'=>'出行天下');
+$db->insertDB('channel',$content);
+/////////////////////////////////////////
+$content=array('sid'=>'2',
+				'cid'=>'2');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'3');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'4');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'5');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'6');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'7');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'2',
+				'cid'=>'8');
+$db->insertDB('consuchannel',$content);
+
+$content=array('sid'=>'3',
+				'cid'=>'9');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'4',
+				'cid'=>'10');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'11');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'12');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'13');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'14');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'15');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'5',
+				'cid'=>'16');
+$db->insertDB('consuchannel',$content);
+
+$content=array('sid'=>'6',
+				'cid'=>'17');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'6',
+				'cid'=>'18');
+$db->insertDB('consuchannel',$content);
+$content=array('sid'=>'6',
+				'cid'=>'19');
+$db->insertDB('consuchannel',$content);
+
+$content=array('sid'=>'7',
+				'cid'=>'20');
+$db->insertDB('consuchannel',$content);
+///forum 插入
+$content=array('cid'=>'21');
+$db->insertDB('forum',$content);
+$content=array('cid'=>'22');
+$db->insertDB('forum',$content);
+$content=array('cid'=>'23');
+$db->insertDB('forum',$content);
+$content=array('cid'=>'24');
+$db->insertDB('forum',$content);
+//对游客不开放板块 插入
+$content=array('cid' => '10');
+$db->insertDB('readctl',$content);
+?>
